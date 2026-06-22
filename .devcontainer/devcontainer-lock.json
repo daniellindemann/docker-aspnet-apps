@@ -1,0 +1,34 @@
+{
+  "features": {
+    "ghcr.io/daniellindemann/dev-container-features/dotnet-usersecrets-persistence:0": {
+      "version": "0.0.1",
+      "resolved": "ghcr.io/daniellindemann/dev-container-features/dotnet-usersecrets-persistence@sha256:8a5214a74316bb86100cb45d2047cf8ec41486b34c239cf2b93f0e9053635bee",
+      "integrity": "sha256:8a5214a74316bb86100cb45d2047cf8ec41486b34c239cf2b93f0e9053635bee"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/fzf:1": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/fzf@sha256:4b32038c6afd303397cd7a6ff2ba705914c59d0691f3389067ea845a2e3c6fee",
+      "integrity": "sha256:4b32038c6afd303397cd7a6ff2ba705914c59d0691f3389067ea845a2e3c6fee"
+    },
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "1.3.0",
+      "resolved": "ghcr.io/devcontainers/features/azure-cli@sha256:d98f1066c077be0fa9d115b718f458bd803e415181b4a96f82a6f5d9f77241ac",
+      "integrity": "sha256:d98f1066c077be0fa9d115b718f458bd803e415181b4a96f82a6f5d9f77241ac"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "1.10.0",
+      "resolved": "ghcr.io/devcontainers/features/docker-outside-of-docker@sha256:c2c2cf829505ead8e4892c88c31b6594ae94a2bbb209e16e1fac456c1a3a624e",
+      "integrity": "sha256:c2c2cf829505ead8e4892c88c31b6594ae94a2bbb209e16e1fac456c1a3a624e"
+    },
+    "ghcr.io/stuartleeks/dev-container-features/azure-cli-persistence:0": {
+      "version": "0.0.9",
+      "resolved": "ghcr.io/stuartleeks/dev-container-features/azure-cli-persistence@sha256:ccd1446a5d87b6b9486a0198dcaa3b6ffc2dba2d9de3f042169938eb9b54e6a0",
+      "integrity": "sha256:ccd1446a5d87b6b9486a0198dcaa3b6ffc2dba2d9de3f042169938eb9b54e6a0"
+    },
+    "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {
+      "version": "0.0.6",
+      "resolved": "ghcr.io/stuartleeks/dev-container-features/shell-history@sha256:f266af2d093e0611921ccf510046e53affeccb353405ee05d2b91fcc4f69c1c9",
+      "integrity": "sha256:f266af2d093e0611921ccf510046e53affeccb353405ee05d2b91fcc4f69c1c9"
+    }
+  }
+}
