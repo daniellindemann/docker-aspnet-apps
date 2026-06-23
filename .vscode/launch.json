@@ -9,6 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "01-sampleapi-build",
+            "launchSettingsProfile": "http",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/bin/Debug/net10.0/DockerAspNetApps.SampleApi.dll",
             "args": [],
@@ -21,6 +22,9 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "logging": {
+              "moduleLoad": false
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

@@ -1,41 +1,63 @@
+using DockerAspNetApps.SampleApi;
+using DockerAspNetApps.SampleApi.Options;
+
+using Microsoft.Extensions.Logging.Console;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// configure logging
+if (builder.Environment.IsProduction())
+{
+    builder.Logging.ClearProviders();
+    // https://learn.microsoft.com/en-us/dotnet/core/extensions/console-log-formatter
+    builder.Logging.AddConsole(options => options.FormatterName = ConsoleFormatterNames.Json);
+}
+else
+{
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+}
+
+// Add custom configurations that can be changed by environment settings
+builder.Services.AddOptions<GreetingsOptions>()
+    .Bind(builder.Configuration.GetSection(GreetingsOptions.PropertyName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+// https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks
+builder.Services.AddHealthChecks();
+
+// add other services
+builder.Services.AddSingleton<OsInformationRetriever>();
+
+// NOT REQUIRED
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// builder.Services.AddOpenApi();
+
+// add cors config
+// allow everything
+// Let the platform handle cors
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin()));
 
 var app = builder.Build();
 
+// NOT REQUIRED
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     app.MapOpenApi();
+// }
 
-app.UseHttpsRedirection();
+// let the platform handle https redirection, if needed
+// app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseCors();  // use cors
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapEndpoints();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

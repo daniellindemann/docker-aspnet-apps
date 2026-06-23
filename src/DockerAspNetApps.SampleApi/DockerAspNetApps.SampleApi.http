@@ -1,6 +1,9 @@
-@DockerAspNetApps.SampleApi_HostAddress = http://localhost:5180
+@DockerAspNetApps_SampleApi_HostAddress = http://localhost:5180
 
-GET {{DockerAspNetApps.SampleApi_HostAddress}}/weatherforecast/
+GET {{DockerAspNetApps_SampleApi_HostAddress}}/architecture/
 Accept: application/json
 
 ###
+
+GET {{DockerAspNetApps_SampleApi_HostAddress}}/hello/
+Accept: application/json
