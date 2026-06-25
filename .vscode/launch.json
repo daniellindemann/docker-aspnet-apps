@@ -24,15 +24,29 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "logging": {
-              "moduleLoad": false
+                "moduleLoad": false
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             },
             "presentation": {
-              "hidden": false,
-              "group": "sample-api",
-              "order": 1000
+                "hidden": false,
+                "group": "sample-api",
+                "order": 1000
+            }
+        },
+        {
+            "name": "Sample API - Containers: .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "01-sampleapi-docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "sample-api",
+                "order": 1001
             }
         },
         {
