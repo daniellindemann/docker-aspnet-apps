@@ -36,67 +36,6 @@
                 "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
             ],
             "problemMatcher": "$msCompile"
-        },
-        {
-            "type": "docker-build",
-            "label": "01-sampleapi-docker-build: debug",
-            "dependsOn": [
-                "01-sampleapi-build"
-            ],
-            "dockerBuild": {
-                "tag": "dockeraspnetapps:dev",
-                "target": "base",
-                "dockerfile": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
-            }
-        },
-        {
-            "type": "docker-build",
-            "label": "01-sampleapi-docker-build: release",
-            "dependsOn": [
-                "01-sampleapi-build"
-            ],
-            "dockerBuild": {
-                "tag": "dockeraspnetapps:latest",
-                "dockerfile": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/Dockerfile",
-                "context": "${workspaceFolder}",
-                "platform": {
-                    "os": "linux",
-                    "architecture": "amd64"
-                },
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "01-sampleapi-docker-run: debug",
-            "dependsOn": [
-                "01-sampleapi-docker-build: debug"
-            ],
-            "dockerRun": {
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj",
-                "enableDebugging": true
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "01-sampleapi-docker-run: release",
-            "dependsOn": [
-                "01-sampleapi-docker-build: release"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
-            }
         }
     ]
 }
