@@ -17,11 +17,35 @@ imageTags=(
     'latest-alpine'
 )
 
+# parse arguments
+platform_arg=''
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --platform)
+            if [[ $# -lt 2 ]]; then
+                echo 'Error: --platform requires a value' >&2
+                exit 1
+            fi
+            platform_arg="$2"
+            shift 2
+            ;;
+        --platform=*)
+            platform_arg="${1#*=}"
+            shift
+            ;;
+        *)
+            echo "Error: unknown argument: $1" >&2
+            exit 1
+            ;;
+    esac
+done
+
 # functions
 build_image() {
     local dockerfile=$1
     local -n names=$2
     local -n tags=$3
+    local platform=${4:-}
 
     local tag_args=()
     for name in "${names[@]}"; do
@@ -30,21 +54,35 @@ build_image() {
         done
     done
 
-    docker buildx build \
-        --file "$dockerfile" \
-        --platform linux/amd64,linux/arm64 \
-        "${tag_args[@]}" \
-        --output type=docker \
-        .
+    # build image
+    if [[ -n "$platform" ]]; then
+        docker buildx build \
+            --file "$dockerfile" \
+            --platform "$platform" \
+            "${tag_args[@]}" \
+            --output type=docker \
+            .
+    else
+        echo ">>> Just do default docker build"
+        docker build \
+            --file "$dockerfile" \
+            "${tag_args[@]}" \
+            .
+    fi
 }
 
 # build image
-pushd $project_dir
+pushd "$project_dir"
 
 echo '🏗️ Crafting container image'
-build_image $dockerfile image_names imageTags
+build_image "$dockerfile" image_names imageTags "$platform_arg"
 echo '🏭 Forged container image'
 
 popd
+
+sample_image="${image_names[0]}:${imageTags[0]}"
+size_bytes=$(docker image inspect "$sample_image" --format '{{.Size}}')
+size_mb=$(awk "BEGIN {printf \"%.2f\", ${size_bytes}/1024/1024}")
+echo "📦 Local image size (${sample_image}): ${size_mb} MB (${size_bytes} bytes)"
 
 echo '✅ Script finished!'

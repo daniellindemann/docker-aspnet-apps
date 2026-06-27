@@ -7,5 +7,5 @@ public class GreetingsOptions
     public const string PropertyName = "Greetings";
 
     [Required]
-    public string To { get; init; } = string.Empty;
+    public string To { get; set; } = string.Empty;
 }

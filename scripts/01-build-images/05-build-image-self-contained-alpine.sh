@@ -14,30 +14,52 @@ image_names=(
 imageTags=(
     '10-self-contained-alpine'
     '10.0.301-self-contained-alpine'
-    'self-contained-alpine'
+    'latest-self-contained-alpine'
 )
 
 # parameters
 no_cache=false
+multi_platform=false
 for arg in "$@"; do
     case "$arg" in
         --no-cache)
             no_cache=true
             ;;
+        --multi-platform)
+            multi_platform=true
+            ;;
         *)
             echo "Unknown argument: $arg"
-            echo "Usage: $0 [--no-cache]"
+            echo "Usage: $0 [--no-cache] [--multi-platform]"
             exit 1
             ;;
     esac
 done
 
 # functions
+detect_host_platform() {
+    local machine
+    machine=$(uname -m)
+
+    case "$machine" in
+        x86_64|amd64)
+            echo "linux/amd64"
+            ;;
+        aarch64|arm64)
+            echo "linux/arm64"
+            ;;
+        *)
+            echo "linux/amd64"
+            ;;
+    esac
+}
+
 build_image() {
     local dockerfile=$1
     local -n names=$2
     local -n tags=$3
     local no_cache_enabled=$4
+    local is_multi_platform=$5
 
     local tag_args=()
     for name in "${names[@]}"; do
@@ -51,22 +73,46 @@ build_image() {
         cache_args+=(--no-cache)
     fi
 
+    local host_platform
+    host_platform=$(detect_host_platform)
+
+    local other_platform='linux/amd64'
+    if [[ "$host_platform" == "linux/amd64" ]]; then
+        other_platform='linux/arm64'
+    fi
+
+    local platforms="$host_platform"
+    if [[ "$is_multi_platform" == "true" ]]; then
+        platforms="${host_platform},${other_platform}"
+        echo "Info: Building with platforms: ${platforms}."
+    fi
+
+    local output_args=()
+    if [[ "$is_multi_platform" == "true" ]]; then
+        output_args=(--output type=docker)
+    fi
+
     docker buildx build \
         --file "$dockerfile" \
-        --platform linux/amd64,linux/arm64 \
+        --platform "$platforms" \
         "${cache_args[@]}" \
         "${tag_args[@]}" \
-        --output type=docker \
+        "${output_args[@]}" \
         .
 }
 
 # build image
-pushd $project_dir
+pushd "$project_dir"
 
 echo '🏗️ Crafting container image'
-build_image "$dockerfile" image_names imageTags "$no_cache"
+build_image "$dockerfile" image_names imageTags "$no_cache" "$multi_platform"
 echo '🏭 Forged container image'
 
 popd
+
+sample_image="${image_names[0]}:${imageTags[0]}"
+size_bytes=$(docker image inspect "$sample_image" --format '{{.Size}}')
+size_mb=$(awk "BEGIN {printf \"%.2f\", ${size_bytes}/1024/1024}")
+echo "📦 Local image size (${sample_image}): ${size_mb} MB (${size_bytes} bytes)"
 
 echo '✅ Script finished!'

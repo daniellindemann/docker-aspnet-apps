@@ -21,7 +21,7 @@ else
 
 // Add custom configurations that can be changed by environment settings
 builder.Services.AddOptions<GreetingsOptions>()
-    .Bind(builder.Configuration.GetSection(GreetingsOptions.PropertyName))
+    .BindConfiguration(GreetingsOptions.PropertyName)
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
