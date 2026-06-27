@@ -34,8 +34,9 @@
 	//		}
 	// }
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "dotnet restore",
+  // Use 'postCreateCommand' to run commands after the container is created.
+    // will run /bin/sh -c .devcontainer/postCreateCommand.sh
+	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -48,6 +49,8 @@
         "docker.docker",
         "ms-azuretools.vscode-bicep",
         "humao.rest-client"
+        // "exiasr.hadolint",
+        // "aquasecurityofficial.trivy-vulnerability-scanner"
       ]
     }
   }
