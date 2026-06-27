@@ -1,8 +1,7 @@
 # change the base to an alpine based image to reduce the size of the final image
-# for more reduction in size, do a self-contained build and use a runtime-deps image as the base image
 # the build stage still uses the default SDK image
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble-chiseled AS base
 WORKDIR /app
 EXPOSE 6780
 
@@ -18,8 +17,8 @@ WORKDIR /src/DockerAspNetApps.SampleApi
 
 COPY ["DockerAspNetApps.SampleApi.csproj", ""]
 RUN case "$TARGETARCH" in \
-	"amd64") runtime="linux-musl-x64" ;; \
-	"arm64") runtime="linux-musl-arm64" ;; \
+	"amd64") runtime="linux-x64" ;; \
+	"arm64") runtime="linux-arm64" ;; \
 	*) echo "Unsupported TARGETARCH: $TARGETARCH" && exit 1 ;; \
 	esac \
 	&& printf '%s' "$runtime" > /tmp/runtime
