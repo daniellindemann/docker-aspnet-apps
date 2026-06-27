@@ -213,20 +213,20 @@ else
 fi
 echo ""
 
+# azure stuff
 
-# && curl -L -o "$script_dir/.temp/notation-azure-kv-checksum.txt" "https://github.com/Azure/notation-azure-kv/releases/download/v${NOTATION_KV_VERSION}/notation-azure-kv_${NOTATION_KV_VERSION}_checksums.txt" \
-#             && $(grep "$script_dir/.temp/notation-azure-kv.tar.gz" "$script_dir/.temp/notation-azure-kv-checksum.txt" | sha256sum -c) \
+# > use latest version of azure cli
+az bicep upgrade
 
+# dotnet stuff
 
-# # dotnet stuff
+# > update dotnet workloads
+sudo dotnet workload update
 
-# # > update dotnet workloads
-# sudo dotnet workload update
+# > install dotnet tools
+dotnet tool restore
 
-# # > install dotnet tools
-# dotnet tool restore
-
-# # > restore and build projects
-# dotnet restore && dotnet build --no-restore
+# > restore and build projects
+dotnet restore && dotnet build --no-restore
 
 echo "✅ Post-create command completed successfully."
