@@ -1,0 +1,44 @@
+# change the base to an alpine based image to reduce the size of the final image
+# the build stage still uses the default SDK image
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-alpine AS base
+WORKDIR /app
+EXPOSE 6780
+
+ENV ASPNETCORE_URLS=http://+:6780
+
+USER app
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+# set architecture info for building a self-contained release
+ARG TARGETARCH
+ARG configuration=Release
+WORKDIR /src/DockerAspNetApps.SampleApi
+
+COPY ["DockerAspNetApps.SampleApi.csproj", ""]
+RUN case "$TARGETARCH" in \
+	"amd64") runtime="linux-musl-x64" ;; \
+	"arm64") runtime="linux-musl-arm64" ;; \
+	*) echo "Unsupported TARGETARCH: $TARGETARCH" && exit 1 ;; \
+	esac \
+	&& printf '%s' "$runtime" > /tmp/runtime
+RUN runtime="$(cat /tmp/runtime)" && echo "Restoring for architecture: ${TARGETARCH} with runtime: ${runtime}"
+RUN dotnet restore "/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj" -r "$(cat /tmp/runtime)"
+
+COPY . .
+
+FROM build AS publish
+ARG TARGETARCH
+ARG configuration=Release
+RUN runtime="$(cat /tmp/runtime)" && echo "Publishing for architecture: ${TARGETARCH} with runtime: ${runtime}"
+RUN dotnet publish "DockerAspNetApps.SampleApi.csproj" -c "$configuration" -o /app/publish \
+	-r "$(cat /tmp/runtime)" \
+    --self-contained true \
+    -p:PublishSingleFile=true \
+    -p:UseAppHost=true \
+    --no-restore
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["./DockerAspNetApps.SampleApi"]

@@ -1,0 +1,31 @@
+# change the base to an 10.0-azurelinux3.0 image to reduce the size of the final image based on the Azure Linux 3.0 image
+# .NET offers also a distroless image based on Azure Linux 3.0; use 10.0-azurelinux3.0-distroless to use
+# the build stage still uses the default SDK image
+# see: https://github.com/dotnet/dotnet-docker/blob/main/documentation/azurelinux.md
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-azurelinux3.0-distroless AS base
+WORKDIR /app
+EXPOSE 6780
+
+ENV ASPNETCORE_URLS=http://+:6780
+
+USER app
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG configuration=Release
+WORKDIR /src/DockerAspNetApps.SampleApi
+
+COPY ["DockerAspNetApps.SampleApi.csproj", ""]
+RUN dotnet restore "/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj"
+COPY . .
+
+RUN dotnet build "/src/DockerAspNetApps.SampleApi/DockerAspNetApps.SampleApi.csproj" -c $configuration -o /app/build
+
+FROM build AS publish
+ARG configuration=Release
+RUN dotnet publish "DockerAspNetApps.SampleApi.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DockerAspNetApps.SampleApi.dll"]

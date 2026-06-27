@@ -1,5 +1,6 @@
 using DockerAspNetApps.SampleApi;
 using DockerAspNetApps.SampleApi.Options;
+using DockerAspNetApps.SampleApi.SystemInfo;
 
 using Microsoft.Extensions.Logging.Console;
 
@@ -29,6 +30,8 @@ builder.Services.AddHealthChecks();
 
 // add other services
 builder.Services.AddSingleton<OsInformationRetriever>();
+builder.Services.AddSingleton<DotNetInformationRetriever>();
+builder.Services.AddSingleton<FileTree>();
 
 // NOT REQUIRED
 // Add services to the container.

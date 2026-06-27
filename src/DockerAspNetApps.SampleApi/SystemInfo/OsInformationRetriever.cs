@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+namespace DockerAspNetApps.SampleApi.SystemInfo;
+
 public class OsInformationRetriever
 {
     public string GetOsString()
@@ -26,16 +28,38 @@ public class OsInformationRetriever
 
     public string GetUnameString()
     {
-        Process unameProcess = Process.Start(new ProcessStartInfo()
+        try
         {
-            FileName = "uname",
-            Arguments = "-a",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            CreateNoWindow = true
-        })!;
+            using Process? unameProcess = Process.Start(new ProcessStartInfo()
+            {
+                FileName = "uname",
+                Arguments = "-a",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            });
 
-        unameProcess.WaitForExit();
-        return unameProcess.StandardOutput.ReadToEnd();
+            if (unameProcess is null)
+                return "ERR: uname not available";
+
+            string output = unameProcess.StandardOutput.ReadToEnd();
+            unameProcess.WaitForExit();
+
+            return unameProcess.ExitCode == 0 ? output : "ERR: uname not available";
+        }
+        catch
+        {
+            return "ERR: uname not available";
+        }
     }
+
+    public string GetOsReleaseString()
+    {
+        return File.ReadAllText("/etc/os-release");
+    }
+
+    public string GetExecutingUser()
+    {
+        return Environment.UserName;
+    } 
 }
