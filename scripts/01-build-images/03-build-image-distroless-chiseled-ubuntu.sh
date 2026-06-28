@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# Usage:
+#   ./03-build-image-distroless-chiseled-ubuntu.sh [--platform <platform>]
+#
+# Parameters:
+#   --platform <platform>
+#     Optional target platform for docker buildx build. By default, the script will build for the host platform.
+#     Example values: linux/amd64, linux/arm64.
+#
+# Examples:
+#   ./03-build-image-distroless-chiseled-ubuntu.sh
+#   ./03-build-image-distroless-chiseled-ubuntu.sh --platform linux/amd64,linux/arm64
+
 set -euo pipefail
 
 script_dir=$(dirname "$0")

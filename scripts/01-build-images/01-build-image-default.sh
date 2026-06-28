@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# Usage:
+#   ./01-build-image-default.sh [--platform <platform>]
+#
+# Parameters:
+#   --platform <platform>
+#     Optional target platform for docker buildx build. By default, the script will build for the host platform.
+#     Example values: linux/amd64, linux/arm64.
+#
+# Examples:
+#   ./01-build-image-default.sh
+#   ./01-build-image-default.sh --platform linux/amd64,linux/arm64
+
 set -euo pipefail
 
 script_dir=$(dirname "$0")

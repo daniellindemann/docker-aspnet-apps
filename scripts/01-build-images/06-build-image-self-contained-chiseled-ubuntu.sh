@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# Usage:
+#   ./06-build-image-self-contained-chiseled-ubuntu.sh [--no-cache] [--multi-platform]
+#
+# Parameters:
+#   --no-cache
+#     Optional flag to disable the Docker build cache.
+#
+#   --multi-platform
+#     Optional flag to build for both linux/amd64 and linux/arm64.
+#     By default, the script builds only for the host platform.
+#
+# Examples:
+#   ./06-build-image-self-contained-chiseled-ubuntu.sh
+#   ./06-build-image-self-contained-chiseled-ubuntu.sh --no-cache
+#   ./06-build-image-self-contained-chiseled-ubuntu.sh --multi-platform
+#   ./06-build-image-self-contained-chiseled-ubuntu.sh --no-cache --multi-platform
+
 set -euo pipefail
 
 script_dir=$(dirname "$0")
@@ -87,17 +104,17 @@ build_image() {
         echo "Info: Building with platforms: ${platforms}."
     fi
 
-    local output_args=()
-    if [[ "$is_multi_platform" == "true" ]]; then
-        output_args=(--output type=docker)
-    fi
+    # local output_args=()
+    # if [[ "$is_multi_platform" == "true" ]]; then
+    #     output_args=(--output type=docker)
+    # fi
 
     docker buildx build \
         --file "$dockerfile" \
         --platform "$platforms" \
         "${cache_args[@]}" \
         "${tag_args[@]}" \
-        "${output_args[@]}" \
+        --output type=docker \
         .
 }
 

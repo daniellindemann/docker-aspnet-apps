@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# Usage:
+#   ./04-build-image-distroless-azure-linux.sh [--platform <platform>]
+#
+# Parameters:
+#   --platform <platform>
+#     Optional target platform for docker buildx build. By default, the script will build for the host platform.
+#     Example values: linux/amd64, linux/arm64.
+#
+# Examples:
+#   ./04-build-image-distroless-azure-linux.sh
+#   ./04-build-image-distroless-azure-linux.sh --platform linux/amd64,linux/arm64
+
 set -euo pipefail
 
 script_dir=$(dirname "$0")
