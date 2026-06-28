@@ -1,0 +1,6 @@
+{
+  "hadolintPath": "hadolint",
+  "cliOptions": [],
+  "maxNumberOfProblems": 100,
+  "outputLevel": "warning"
+}

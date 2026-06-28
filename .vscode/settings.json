@@ -1,0 +1,5 @@
+{
+    "hadolint.hadolintPath": "/usr/local/bin/hadolint",
+    "hadolint.cliOptions": [
+    ]
+}
