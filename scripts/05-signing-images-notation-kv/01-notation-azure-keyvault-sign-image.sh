@@ -75,6 +75,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # --- Developer part ---
+echo ""
 echo "D E V E L O P E R   P A R T"
 echo "---------------------------"
 
@@ -141,17 +142,18 @@ notation ls $acr_image
 message_and_wait "Gimme more! Ops part please!!!"
 
 # --- Operations part ---
+echo ""
 echo "O P E R A T I O N S   P A R T"
 echo "-----------------------------"
 
 message_and_wait "> 🔽📜 Download signing certificate from Azure Key Vault"
-rm $cert_path 2> /dev/null
+rm -f -- "$cert_path"
 az keyvault certificate download --name $cert_name --vault-name $akv_name --file $cert_path
 cat $cert_path
 
 message_and_wait "> 🏪 Add certifcate to Notation store"
-notation cert delete --type $store_type --store $store_name -a -y 2> /dev/null
-notation cert add --type $store_type --store $store_name $cert_path
+notation cert delete --type "$store_type" --store "$store_name" -a -y 2> /dev/null || true
+notation cert add --type "$store_type" --store "$store_name" "$cert_path"
 
 message_and_wait "> 🧑‍⚖️ Create trust policy for repository $acr_image"
 echo "ℹ️ Info:"
@@ -159,7 +161,7 @@ echo "Trust policies enable users to specify fine-tuned verification policies."
 echo "They allow you to define which signers are trusted for a given repository, and what signature formats are acceptable."
 message_and_wait ''
 
-cat <<EOF > $temp_dir/trustpolicy.json
+cat <<EOF > $temp_dir/trust_policy.json
 {
     "version": "1.0",
     "trustPolicies": [
