@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 
 # exclude devcontainer files
 .devcontainer/.temp
+
+# exclude temp folders
+temp/

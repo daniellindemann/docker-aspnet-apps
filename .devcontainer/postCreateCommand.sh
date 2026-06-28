@@ -229,4 +229,9 @@ dotnet tool restore
 # > restore and build projects
 dotnet restore && dotnet build --no-restore
 
+# tool stuff
+
+# > update trivy db
+trivy image --download-db-only
+
 echo "✅ Post-create command completed successfully."
