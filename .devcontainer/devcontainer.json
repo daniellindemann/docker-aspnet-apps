@@ -4,7 +4,8 @@
 	"name": "C# (.NET)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/dotnet:2-10.0-noble",
-  "runArgs": ["--name", "devcontainer_docker-aspnet-apps"],
+  "runArgs": ["--name", "devcontainer_docker-aspnet-apps",
+    "--hostname", "devcontainer_docker-aspnet-apps"],
   // Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/azure-cli:1": {

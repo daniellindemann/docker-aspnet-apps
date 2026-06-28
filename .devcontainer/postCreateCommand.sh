@@ -234,4 +234,18 @@ dotnet restore && dotnet build --no-restore
 # > update trivy db
 trivy image --download-db-only
 
+# # ensure container registry
+
+# registry_container_name="registry_$HOSTNAME"
+# registry_image="registry:3"
+# if [ "$(docker ps -q -f name=$registry_container_name)" ]; then
+#     echo "Container $registry_container_name is already running, skipping creation"
+# elif [ "$(docker ps -aq -f name=$registry_container_name)" ]; then
+#     echo "Container $registry_container_name exists but is not running, starting it"
+#     docker start $registry_container_name
+# else
+#     echo "Container $registry_container_name does not exist, creating and starting it"
+#     docker run -d -p 127.0.0.1:5000:5000 -e REGISTRY_STORAGE_DELETE_ENABLED=true --name $registry_container_name $registry_image
+# fi
+
 echo "✅ Post-create command completed successfully."

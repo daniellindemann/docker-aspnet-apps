@@ -25,6 +25,14 @@ Everything runs in a dev container. Open it with Visual Studio Code. You can now
     - Notation (https://github.com/notaryproject/notation)
     - Notation AKV Plugin (https://github.com/Azure/notation-azure-kv)
 
+## Azure
+
+Setup Azure Key Vault and Azure Container Registry for demo purposes.
+
+```bash
+bicep/azuredeploy.ps1
+```
+
 ## Demos
 
 [View Demos](Demos.md)

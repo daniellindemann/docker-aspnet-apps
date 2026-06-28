@@ -9,6 +9,8 @@ param enableKeyVaultPurgeProtection bool = false
 var suffix = substring(uniqueString(resourceGroup().id), 0, 6)
 var deployerPrincipalId = deployer().objectId
 var keyVaultAdministratorRole = roleDefinitions('Key Vault Administrator')
+var acrPullRole = roleDefinitions('AcrPull')
+var acrPushRole = roleDefinitions('AcrPush')
 
 resource keyVault 'Microsoft.KeyVault/vaults@2026-02-01' = {
   name: 'kv-daa-${suffix}'
@@ -44,6 +46,26 @@ resource roleAssignmentKeyVaultAdministrator 'Microsoft.Authorization/roleAssign
   properties: {
     principalId: deployerPrincipalId
     roleDefinitionId: keyVaultAdministratorRole.id
+    principalType: 'User'
+  }
+}
+
+resource roleAssignmentAcrPush 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(containerRegistry.id, deployerPrincipalId, acrPushRole.id)
+  scope: containerRegistry
+  properties: {
+    principalId: deployerPrincipalId
+    roleDefinitionId: acrPushRole.id
+    principalType: 'User'
+  }
+}
+
+resource roleAssignmentAcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(containerRegistry.id, deployerPrincipalId, acrPullRole.id)
+  scope: containerRegistry
+  properties: {
+    principalId: deployerPrincipalId
+    roleDefinitionId: acrPullRole.id
     principalType: 'User'
   }
 }
