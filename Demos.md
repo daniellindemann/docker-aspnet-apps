@@ -16,7 +16,7 @@
 
 > switch back to `main` branch
 
-- Show [`Dockerfile.default`](src/DotnetContainerOptimization.SampleApp/Dockerfile.default)
+- Show [`Dockerfile`](src/DotnetContainerOptimization.SampleApp/Dockerfile)
     - Explain multi-stage build
     - Explain what happens
 - Build and run the default docker container image
@@ -286,6 +286,23 @@
         > See [scripts/03-trivy/03-trivy-image-alpine-severity.sh](scripts/03-trivy/03-trivy-image-alpine-severity.sh)
     
     - Show few to no errors!
+
+## Export SBOM with trivy
+
+> Ensure docker-aspnet-apps/sample-api:10 is available
+
+- Generate SBOM with trivy
+
+    ```
+    trivy image \
+        --format cyclonedx \
+        --output "temp/trivy-output/sample-api-10-cyclonedx.json" \
+        docker-aspnet-apps/sample-api:10
+    ```
+- Show file [temp/trivy-output/sample-api-10-cyclonedx.json](temp/trivy-output/sample-api-10-cyclonedx.json)
+
+- Show file with SBOM viewer https://cyclonedx.github.io/Sunshine/
+
 
 ## Image patching with copacetic
 

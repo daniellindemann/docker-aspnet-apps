@@ -19,6 +19,14 @@
 			"version": "latest",
 			"dockerDashComposeVersion": "latest"
 		},
+    // "ghcr.io/devcontainers/features/docker-in-docker:4": {
+		// 	"moby": true,
+		// 	"azureDnsAutoDetection": true,
+		// 	"installDockerBuildx": true,
+		// 	"iptablesSwitchAtRuntime": true,
+		// 	"version": "latest",
+		// 	"dockerDashComposeVersion": "latest"
+		// },
 		"ghcr.io/stuartleeks/dev-container-features/azure-cli-persistence:0": {},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
 		"ghcr.io/devcontainer-community/devcontainer-features/fzf:1": {
